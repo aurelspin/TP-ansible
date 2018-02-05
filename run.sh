@@ -1,5 +1,5 @@
 #!/bin/bash 
-
+#delete running containers
 docker kill $(docker ps -a -q -f name="tp_ansi")
 docker rm $(docker ps -a -q -f name="tp_ansi")
 echo "[ALL]" > hosts_list
