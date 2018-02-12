@@ -1,0 +1,22 @@
+---
+- hosts: all
+  remote_user: ansible
+  tasks:
+  - name: Get host uptime
+    shell: uptime
+    register: result
+    changed_when: false
+  - debug: var=result.stdout_lines
+  - name: Install a few packages ( gcc , apache )  
+    become: true
+    apt: name="{{item}}" state=present
+    register: result
+    with_items:
+    - apache2
+    - gcc
+  - name: restart apache2
+    service: name=apache2 state=started
+    notify: verify port 80
+  handlers:
+    - name: verify port 80
+      wait_for: port=80 timeout=3  
